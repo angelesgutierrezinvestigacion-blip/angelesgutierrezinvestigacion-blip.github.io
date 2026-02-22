@@ -472,46 +472,43 @@ function generateMenu(){
     toast("⚠️ Perfil con riesgo nutricional: menú adaptado. Si empeoras, consulta con tu unidad.");
   }
 
-let prevBreakfast = "";
-let prevLunch = "";
-let prevSnack = "";
-let prevDinner = "";
+let usedBreakfast = [];
+let usedLunch = [];
+let usedSnack = [];
+let usedDinner = [];
 
 for(let d=1; d<=7; d++){
 
   // DESAYUNO
-  const breakfast = pickDifferent(menu.breakfasts, prevBreakfast);
+  const breakfast = pickWeekly(menu.breakfasts, usedBreakfast);
   setCell(0,d,breakfast);
-  prevBreakfast = breakfast;
 
   // COMIDA PRIMER PLATO
-  const lunch = pickDifferent(menu.lunches, prevLunch);
+  const lunch = pickWeekly(menu.lunches, usedLunch);
   setCell(1,d,lunch);
-  prevLunch = lunch;
 
-  // COMIDA SEGUNDO (proteína)
+  // COMIDA SEGUNDO
   const proteinLunch = listaProteinas[Math.random()*listaProteinas.length|0];
   setCell(2,d,proteinLunch);
 
   // MERIENDA
-  const snack = pickDifferent(menu.snacks, prevSnack);
+  const snack = pickWeekly(menu.snacks, usedSnack);
   setCell(3,d,snack);
-  prevSnack = snack;
 
-  // CENA PRIMER PLATO (no repetir comida)
+  // CENA PRIMER PLATO (no repetir con comida)
   let dinner;
   do{
-    dinner = pickDifferent(menu.dinners, prevDinner);
+    dinner = pickWeekly(menu.dinners, usedDinner);
   } while(dinner === lunch);
 
   setCell(4,d,dinner);
-  prevDinner = dinner;
 
-  // CENA SEGUNDO (proteína)
+  // CENA SEGUNDO
   const proteinDinner = listaProteinas[Math.random()*listaProteinas.length|0];
   setCell(5,d,proteinDinner);
 }
-    alert("Menú clínico adaptado generado");
+
+alert("Menú clínico adaptado generado");
 
   }
 
@@ -851,6 +848,22 @@ function pickDifferent(list, previous){
     choice = list[Math.random()*list.length|0];
   } while(choice === previous);
 
+  return choice;
+}
+function pickWeekly(list, used){
+  if(!list || list.length === 0) return "";
+
+  // Opciones no usadas
+  let options = list.filter(x => !used.includes(x));
+
+  // Si se acaban, reiniciar
+  if(options.length === 0){
+    used.length = 0;
+    options = list;
+  }
+
+  const choice = options[Math.random()*options.length|0];
+  used.push(choice);
   return choice;
 }
 </script>
