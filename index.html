@@ -455,9 +455,6 @@ function computeClinicalProfile(){
     risk: lowApp ? "alto" : "normal"
   };
 }
-document.querySelectorAll("tbody tr")[r].children[d].innerText=t;
-}
-function generateMenu(){
 
 function generateMenu(){
   const profile = computeClinicalProfile();
@@ -515,7 +512,7 @@ for(let d=1; d<=7; d++){
   setCell(5,d,proteinDinner);
 }
     alert("Menú clínico adaptado generado");
-}
+
   }
 
 function clearTable(){
