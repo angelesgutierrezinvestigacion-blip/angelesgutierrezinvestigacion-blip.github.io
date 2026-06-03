@@ -1,6 +1,19 @@
-self.addEventListener('install', function(event) {
-  console.log('Service Worker instalado');
+
+const CACHE_NAME = "mimenutph-v5";
+
+self.addEventListener("install", event => {
+  self.skipWaiting();
 });
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.map(key => caches.delete(key)))
+    )
+  );
+  self.clients.claim();
+});
+
+self.addEventListener("fetch", event => {
+  event.respondWith(fetch(event.request));
 });
